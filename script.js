@@ -9,38 +9,30 @@ function yes() {
   document.getElementById("end").classList.add("active");
 }
 
-// ---------- NO BUTTON ESCAPE LOGIC ----------
+// ---------- NO BUTTON ESCAPE (MOBILE + DESKTOP) ----------
 const noBtn = document.getElementById("noBtn");
 const container = document.querySelector(".choices");
 
-// Prevent accidental focus / click
+// Prevent focus / click
 noBtn.addEventListener("click", (e) => {
   e.preventDefault();
   escape();
 });
 
-// Mobile touch support
-noBtn.addEventListener("touchstart", escape);
+// Mobile: escape on touch proximity
+container.addEventListener("touchstart", escape);
+container.addEventListener("touchmove", escape);
 
-// Desktop: escape BEFORE hover happens
+// Desktop: escape before hover
 container.addEventListener("mousemove", (e) => {
-  const btnRect = noBtn.getBoundingClientRect();
+  const rect = noBtn.getBoundingClientRect();
 
-  const mouseX = e.clientX;
-  const mouseY = e.clientY;
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
 
-  const btnCenterX = btnRect.left + btnRect.width / 2;
-  const btnCenterY = btnRect.top + btnRect.height / 2;
+  const distance = Math.hypot(e.clientX - cx, e.clientY - cy);
 
-  const distance = Math.hypot(
-    mouseX - btnCenterX,
-    mouseY - btnCenterY
-  );
-
-  // If cursor comes close, run away
-  if (distance < 90) {
-    escape();
-  }
+  if (distance < 100) escape();
 });
 
 function escape() {
