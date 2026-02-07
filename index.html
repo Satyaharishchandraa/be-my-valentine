@@ -50,6 +50,8 @@
       display: flex;
       justify-content: center;
       gap: 2rem;
+      position: relative;
+      height: 60px; /* To limit vertical movement */
     }
 
     /* Buttons base */
@@ -65,6 +67,8 @@
       box-shadow: 0 8px 20px rgba(229, 57, 70, 0.3);
       color: white;
       outline-offset: 3px;
+      position: relative;
+      z-index: 2;
     }
 
     /* Yes button */
@@ -87,23 +91,14 @@
       background: #d3d3d3;
       color: #666;
       cursor: not-allowed;
-      pointer-events: none;
       user-select: none;
       box-shadow: none;
-      position: relative;
-      opacity: 0.7;
-    }
-
-    /* Fun wiggle on hover of container to tease */
-    .card:hover #no {
-      animation: wiggle 0.6s ease-in-out 2;
-      opacity: 0.9;
-    }
-
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(5deg); }
-      75% { transform: rotate(-5deg); }
+      position: absolute;
+      top: 0;
+      left: calc(50% + 90px);
+      transition: left 0.4s ease, top 0.4s ease;
+      outline: none;
+      z-index: 3;
     }
 
     /* Celebration overlay */
@@ -190,6 +185,9 @@
         font-size: 1rem;
         padding: 0.9rem 1.8rem;
       }
+      #no {
+        left: calc(50% + 70px);
+      }
     }
   </style>
 </head>
@@ -262,6 +260,51 @@
       showCelebration();
     });
 
+    // No button runaway logic
+    const noBtn = document.getElementById('no');
+    const container = document.querySelector('.buttons');
+
+    // Disable keyboard focus and click on No button
+    noBtn.setAttribute('tabindex', '-1');
+    noBtn.setAttribute('aria-disabled', 'true');
+    noBtn.addEventListener('keydown', e => e.preventDefault());
+    noBtn.addEventListener('click', e => e.preventDefault());
+
+    // Move No button smoothly when mouse moves close
+    function moveNoBtnIfClose(event) {
+      const rect = noBtn.getBoundingClientRect();
+      const pointerX = event.touches ? event.touches[0].clientX : event.clientX;
+      const pointerY = event.touches ? event.touches[0].clientY : event.clientY;
+
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const distance = Math.hypot(pointerX - centerX, pointerY - centerY);
+
+      if (distance < 100) {
+        // Calculate new position inside container
+        const containerRect = container.getBoundingClientRect();
+        const btnWidth = noBtn.offsetWidth;
+        const btnHeight = noBtn.offsetHeight;
+        const padding = 10;
+
+        const maxX = containerRect.width - btnWidth - padding;
+        const maxY = containerRect.height - btnHeight - padding;
+
+        // Pick random new coords within container relative to container left/top
+        const newLeft = Math.random() * maxX;
+        const newTop = Math.random() * maxY;
+
+        // Convert container-relative coords to viewport absolute coords
+        // Actually, since noBtn is absolute inside .buttons, left/top are relative to .buttons
+        noBtn.style.left = newLeft + 'px';
+        noBtn.style.top = newTop + 'px';
+      }
+    }
+
+    // Listen to mousemove and touchmove on entire document
+    document.addEventListener('mousemove', moveNoBtnIfClose);
+    document.addEventListener('touchmove', moveNoBtnIfClose);
   </script>
 </body>
 </html>
