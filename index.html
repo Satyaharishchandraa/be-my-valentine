@@ -59,8 +59,7 @@
 
 <script>
 // SHA-256 Hash of: #victoryOfEarthAndPerfectPrince
-const correctHash = "4e7b7f9d1d6efb2f7d1d5a2c9b9e5c4cbdc70a58b9f9e7a2b1c5d4e6f7a8b9c1"; 
-
+const correctHash ="ac78b948bc5da553c6d8241db5ec60c8b305ac7ee8dbe3ed8cf4a243482531b5";
 async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
