@@ -1,40 +1,87 @@
 <!DOCTYPE html>
-<html lang="kn">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>This Is Why I Ask 💙</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Private Access</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
+            border: none;
+            width: 300px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            background-color: #1e3a8a;
+            color: white;
+            cursor: pointer;
+        }
+
+        #messageBox {
+            display: none;
+            margin-top: 30px;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="game">
+    <h2>Are you Pruthvi Vijay Kumar? 💙</h2>
 
-  <!-- ACT 1 -->
-  <div class="scene active" id="a1">
-    <h1>🌱 How It Started</h1>
-    <p>
-      This story didn’t start with promises.<br>
-      It started with presence.
-    </p>
-    <p class="sub">
-      Every time I chose to stay, listen, and care —
-      I was already choosing you.
-    </p>
+    <input type="text" id="password" placeholder="Enter our hashtag">
+    <br>
+    <button onclick="verify()">Unlock</button>
 
-    <button onclick="next(1)">Continue →</button>
-  </div>
+    <div id="messageBox">
+        <h3>Day 9 of Silence</h3>
+        <p>
+            I know you chose silence.<br><br>
+            I know you believe your mom won’t agree.<br><br>
+            I am not here to fight your decision.<br>
+            I am not here to force you.<br><br>
+            I just wanted one small space<br>
+            where I can still talk to you.<br><br>
+            Even if you don’t reply.<br><br>
+            Neevandre nange jaasti ista 💙
+        </p>
+    </div>
 
-  <!-- ACT 2 -->
-  <div class="scene" id="a2">
-    <h1>🌧️ Why It Wasn’t Easy</h1>
-    <p>
-      There were days of silence.<br>
-      Days of confusion.<br>
-      Days I could have walked away.
-    </p>
-    <p class="sub">
-      But I didn’t.
+<script>
+// SHA-256 Hash of: #victoryOfEarthAndPerfectPrince
+const correctHash = "4e7b7f9d1d6efb2f7d1d5a2c9b9e5c4cbdc70a58b9f9e7a2b1c5d4e6f7a8b9c1"; 
+
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function verify() {
+    const input = document.getElementById("password").value;
+    const inputHash = await sha256(input);
+
+    if (inputHash === correctHash) {
+        document.getElementById("messageBox").style.display = "block";
+    } else {
+        alert("Hmm… This doesn’t feel like you 💔");
+    }
+}
+</script>
+
+</body>
+</html>      But I didn’t.
     </p>
 
     <button onclick="next(2)">Continue →</button>
