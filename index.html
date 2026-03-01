@@ -58,8 +58,9 @@
     </div>
 
 <script>
-// SHA-256 Hash of: #victoryOfEarthAndPerfectPrince
-const correctHash ="ac78b948bc5da553c6d8241db5ec60c8b305ac7ee8dbe3ed8cf4a243482531b5";
+<script>
+const correctHash = "ac78b948bc5da553c6d8241db5ec60c8b305ac7ee8dbe3ed8cf4a243482531b5";
+
 async function sha256(message) {
     const msgBuffer = new TextEncoder().encode(message);
     const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
@@ -72,11 +73,16 @@ async function verify() {
     const inputHash = await sha256(input);
 
     if (inputHash === correctHash) {
-        document.getElementById("messageBox").style.display = "block";
+
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("protectedContent").style.display = "block";
+        window.scrollTo(0,0);
+
     } else {
         alert("Hmm… This doesn’t feel like you 💔");
     }
 }
+</script>
 </script>
 
 </body>
